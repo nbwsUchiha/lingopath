@@ -7,11 +7,11 @@ from dotenv import load_dotenv
 # Load env vars from .env
 load_dotenv()
 
-API_URL = os.getenv("API_URL", "http://localhost:8000")
+API_URL = os.getenv("API_URL", "https://nbws-lingopath.hf.space/")
 
-st.set_page_config(page_title="Learning Path Generator", layout="wide")
+st.set_page_config(page_title="LingoPath", layout="wide")
 
-st.title("Multilingual Learning Path Generator")
+st.title("LingoPath")
 
 with st.sidebar:
     st.header("Settings")
@@ -155,3 +155,4 @@ try:
     st.write({"health": resp.json() if resp.ok else resp.text})
 except Exception as exc:
     st.write({"health_error": str(exc)})
+
