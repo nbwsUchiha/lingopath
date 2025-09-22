@@ -2,6 +2,14 @@
 
 An end-to-end app that builds adaptive, multilingual study plans from open MOOC catalogs, generates quizzes, tracks learner progress, and syncs plans to Google Classroom. Backend is FastAPI; frontend is Streamlit; LLM is Groq via LangChain; optional translation via DeepL.
 
+## Tech Stack
+- Backend: FastAPI (Uvicorn) @[LingoPath - HuggingFace](https://nbws-lingopath.hf.space/docs)
+- Frontend: Streamlit @[LingoPath](https://lingopath.streamlit.app/)
+- LLM: LangChain + Groq
+- Translation: DeepL (optional)
+- Google Classroom: google-api-python-client
+- Packaging: Docker (for deployment)
+
 ## Features
 - Plan generation in multiple languages using Groq (LangChain)
 - Course search from Coursera/edX (public catalog + sensible fallbacks)
@@ -12,14 +20,6 @@ An end-to-end app that builds adaptive, multilingual study plans from open MOOC 
   - Create assignments from plan modules
   - Invite students by email and fetch enrollment code
   - Optional Meet URL included in assignment descriptions
-
-## Tech Stack
-- Backend: FastAPI (Uvicorn) @[LingoPath - HuggingFace](https://nbws-lingopath.hf.space/docs)
-- Frontend: Streamlit @[LingoPath](https://lingopath.streamlit.app/)
-- LLM: LangChain + Groq
-- Translation: DeepL (optional)
-- Google Classroom: google-api-python-client
-- Packaging: Docker (for deployment)
 
 ## Repository Structure
 ```
