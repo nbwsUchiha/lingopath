@@ -232,9 +232,6 @@ docker run -p 8000:8000 -p 8501:8501 --env-file .env learning-path:latest
 - More robust quiz formats and grading
 - Auth for multi-user deployments
 
-## License
-Specify your license here.
-
 ## Acknowledgments
 - FastAPI, Streamlit, LangChain, Groq
 - Google Classroom API, DeepL API
