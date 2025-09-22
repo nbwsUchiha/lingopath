@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Load env vars from .env
 load_dotenv()
 
-API_URL = os.getenv("API_URL", "https://nbws-lingopath.hf.space/")
+API_URL = os.getenv("API_URL", "http://localhost:8000")
 
 st.set_page_config(page_title="Learning Path Generator", layout="wide")
 
@@ -102,12 +102,42 @@ if st.button("Get Progress"):
 
 st.subheader("Google Classroom")
 course_name = st.text_input("Classroom Course Name", value="Learning Path")
+meet_url = st.text_input("Meet URL (optional)", value="")
+colA, colB, colC = st.columns([2,1,1])
+with colA:
+    emails_raw = st.text_area("Student Emails (comma or newline)", value="")
+with colB:
+    if st.button("Invite Students"):
+        emails = [e.strip() for e in emails_raw.replace("\n", ",").split(",") if e.strip()]
+        payload = {"course_name": course_name, "emails": emails}
+        try:
+            resp = requests.post(f"{api_url}/api/classroom/invite", json=payload, timeout=60)
+            if resp.ok:
+                st.success("Invites sent (check results)")
+                st.json(resp.json())
+            else:
+                st.error(resp.text)
+        except Exception as exc:
+            st.exception(exc)
+with colC:
+    if st.button("Get Enrollment Code"):
+        try:
+            resp = requests.get(f"{api_url}/api/classroom/enrollment_code", params={"course_name": course_name}, timeout=30)
+            if resp.ok:
+                data = resp.json()
+                st.success(f"Enrollment code: {data.get('enrollmentCode')}")
+            else:
+                st.error(resp.text)
+        except Exception as exc:
+            st.exception(exc)
+
+# Optional: push plan as assignments
 if st.button("Push Plan to Classroom"):
     plan = st.session_state.get("last_plan")
     if not plan:
         st.warning("Please generate a plan first.")
     else:
-        payload = {"course_name": course_name, "plan": {"goals": goals, "level": "beginner", "preferred_languages": [lang], "duration_weeks": weeks}}
+        payload = {"course_name": course_name, "meet_url": meet_url or None, "plan": {"goals": goals, "level": "beginner", "preferred_languages": [lang], "duration_weeks": weeks}}
         try:
             resp = requests.post(f"{api_url}/api/classroom/push", json=payload, timeout=60)
             if resp.ok:
@@ -125,4 +155,3 @@ try:
     st.write({"health": resp.json() if resp.ok else resp.text})
 except Exception as exc:
     st.write({"health_error": str(exc)})
-
